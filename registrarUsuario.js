@@ -2,6 +2,8 @@ const {
     cursos
 } = require('./informacionCursos');
 const fs = require('fs');
+const express = require('express');
+const app = express();
 
 const datosUsuario = {
     idCurso: {
@@ -22,12 +24,11 @@ const argv = require('yargs')
     .command('Inscribir', 'Inscribir usuario ', datosUsuario)
     .argv;
 
-console.log("LOS SIGUIENTES SON LOS CURSOS OFERTADOS: ");
-// console.log(cursos);
-
-console.log("       ID      " + "       NOMBRE      " + "       DURACIÓN        " + "     VALOR");
-
-function mostrarCursos() {
+    
+    function mostrarCursos() {
+        console.log("LOS SIGUIENTES SON LOS CURSOS OFERTADOS: ");
+        
+        console.log("       ID      " + "       NOMBRE      " + "       DURACIÓN        " + "     VALOR");
     for (let i = 0; i < cursos.length; i++) {
         (function (i) {
             setTimeout(function () {
@@ -42,12 +43,12 @@ function mostrarCursos() {
 if (argv.idCurso) {
     let curso = cursos.find(item => item.id == argv.idCurso);
     if (curso) {
-        texto = 'El estudiante '+argv.nombreUsuario+' con cedula '+argv.cedulaUsuario+
-        ' se ha inscrito en el curso: '+ curso.nombre+ 'con una duración de '+ curso.duracion+' horas y un costo de '+ curso.valor +' pesos.';
-        fs.writeFile('Inscripción.txt', texto, (err) => {
-            if (err) throw (err);
-            console.log('Se ha creado el archivo correctamente');
-        });
+        texto = 'El estudiante ' + argv.nombreUsuario + ' con cedula ' + argv.cedulaUsuario +
+            ' se ha inscrito en el curso: ' + curso.nombre + ' con una duración de ' + curso.duracion + ' horas y un costo de ' + curso.valor + ' pesos.';
+        // fs.writeFile('Inscripción.txt', texto, (err) => {
+        //     if (err) throw (err);
+        //     console.log('Se ha creado el archivo correctamente');
+        // });
 
     } else {
         console.log("El id ingresado no existe entre los cursos mostrados.");
@@ -57,5 +58,8 @@ if (argv.idCurso) {
     mostrarCursos();
 }
 
+app.get('/', function (req, res) {
+    res.send(texto)
+})
 
-// mostrarCursos();
+app.listen(3000)
